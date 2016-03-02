@@ -1,0 +1,16 @@
+{
+  "name": "fixcouch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "JSONStream": "^1.0.7",
+    "event-stream": "^3.3.2",
+    "lodash": "^4.5.0",
+    "request": "^2.69.0"
+  }
+}
