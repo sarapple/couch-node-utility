@@ -1,6 +1,6 @@
 #Couch Doc Fixer
 
-###This package consists of three scripts used to update couch documents based on a filter.
+###This package consists of scripts to run to pull relevant data from documents, filter documents, and update edited documents.
 
 ###To use
 
@@ -18,10 +18,10 @@ Run scripts:
 node getter.js
 node converter.js
 ```
-The getter.js and converter.js scripts are required (in that order) before any processing/filtering can take place.
+The getter.js and converter.js scripts are required (in that order) before any processing/filtering can take place. The scripts below will be used separately (although combining is possible by altering the script), for purposes described below.
 ```
 node filter.js
-node finder.js
+node collector.js
 node updater.js
 ```
 
@@ -31,19 +31,17 @@ Get all docs in a couch db POST request based on params in config.js, and output
 
 ###Converter
 
-Create a JSON object that contains rows of arrays containing only couch doc ids in array sizes based on rowmax specification in config.js. This will be outputted in a file called converter.json and is paginated by array, so that the response is a sane number to run through.
+Create a JSON object that contains rows of arrays (max size specified in config.js) containing only couch doc ids. This will be outputted in a file called converter.json and is paginated by array, so that each couch request (in subsequent scripts) contain a manageable number of ids when full documents are retrieved.
 
 ###Filter
 
-Create a JSON object like the output of converter.js, except that it only contains ids of those specified in the filter function in config.js. Output will be filter.json. If for updater.js and collector.js you would like to use filter.json, just change the read stream script.
+Create a JSON object like the output of converter.js, except that it only contains ids of those specified in the filter function in config.js. Output will be filter.json. If for updater.js and collector.js you would like to use filter.json, just change the read stream source.
 
 ###Updater
 
-Fetches full documents from couch (based on config.js) from the converter.json file. Sends all documents through the filter function, one by one.
+Fetches full documents from couch (based on config.js) from the converter.json file. Sends all documents through the filter function, one by one. In your filter function, return the doc if it matches the filter. Otherwise return null (and do not process).
 
-Return the doc if it matches the filter. Otherwise return null (and do not process).
-
-Then the document runs through the process function in config.js and alters the document. The return object is what will be passed to the http PUT request to update the document (unless null, in which case no request is made).
+Then the document runs through the process function in config.js and alters the document. However you return the document object is what will be passed to the http PUT request to update the document on couch (unless null, in which case no request is made).
 
 ###Collector
 
