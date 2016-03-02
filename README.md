@@ -7,8 +7,8 @@
 Setup:
 
 ```
-git clone https://github.com/sarapple/couchfixer
-cd couchfixer
+git clone https://github.com/sarapple/couch-node-utility
+cd couch-node-utility
 npm install
 ```
 
